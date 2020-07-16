@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
- 			{{env['APP_ENV']}}
+ 			{{env('APP_ENV')}}
                 </div>
 
                 <div class="links">
