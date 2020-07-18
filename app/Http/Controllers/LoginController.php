@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\LoginModel;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -66,16 +67,15 @@ class LoginController extends Controller
         $login_name = request()->input('login_name');
         $login_pass = request()->input('login_pass');
         $u = LoginModel::where(['login_name'=>$login_name])->orwhere(['email'=>$login_name])->orwhere(['tel'=>$login_name])->first();
-        
-        $res = password_verify($login_pass,$u->login_pass);
-        
-        if($res){
+                
+        if(password_verify($login_pass,$u->login_pass))
+        {
+            //session
+            session(['id'=>$u->id]);    
             echo "<script>alert('登陆成功,正在跳转至个人中心...');location.href='center'</script>";
         }else{
             echo "<script>alert('用户名与密码不一致,请重新确认');location.href='login'</script>";
         }
-
-
     }
 
 
@@ -84,7 +84,12 @@ class LoginController extends Controller
      */
     public function center()
     {
-        return view('login.center');
+        if(session()->has('id'))
+        {
+            echo "欢迎来到个人中心";
+        }else{
+            echo "请先登录";
+        }
     }
 
 }
